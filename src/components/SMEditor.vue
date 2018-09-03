@@ -1,81 +1,29 @@
 <template>
   <div class="smeditor" id="smeditor">
+    <div>{{config}}</div>
     <div class="buttons" :class="buttonsBarFixed == true ? 'isFixed' :''">
-      <button type="button" class='undo' @click='undo' v-on:mouseover.stop='mouseover($event)' title="撤销">
-        <img :src="icons.undo"></img>
-      </button>
-      <button type="button" class='redo' @click='redo' v-on:mouseover.stop='mouseover($event)' title="重做">
-        <img :src='icons.redo'></img>
-      </button>
-      <button type="button" class='remove-format'
-              title="清除"
-              @click='removeFormat'
-              v-on:mouseover.stop='mouseover($event)'>
-        <img :src='icons.removeFormat'></img>
-      </button>
+      
+      
       <button type="button" class='set-font' @click.stop="titleButtonClick">
         <span>H</span>
          <title-picker v-bind:titlePickerClick="titlePickerClick" v-show="isTitlePickerShow"></title-picker>
       </button>
-      <!-- <button type="button" class="font-size"
-              title="字号"
-              @click="isFontSizePickerShow = !isFontSizePickerShow"
-              v-on:mouseover.stop='mouseover($event)'>
-        <span> {{fontSize}} </span>
-        <font-size-picker v-bind:FontSizePickerClick="FontSizePickerClick" v-show="isFontSizePickerShow"></font-size-picker> -->
-      </button>
-      <button type="button" v-for='(name, index) in basicIcons'
-              @click='basicStyleClick(name)'
-              v-bind:class="{buttonsActive: styles.indexOf(name) > -1}"
-              v-on:mouseover.stop='mouseover($event)'
-              v-bind:title='basicStyleNames[Object.keys(basicIcons).indexOf(name)]'>
-        <img :src='icons[name]'></img>
-      </button>
-      <button type="button" v-on:mouseover.stop='mouseover($event)' title="文本颜色">
-        <img :src='icons.color' @click="isColorPickerShow = !isColorPickerShow"></img>
-        <color-picker :ColorPickerClick="colorPickerClick" v-show="isColorPickerShow"></color-picker>
-      </button>
-      <button type="button" class='indent' @click.stop='indent' v-on:mouseover.stop='mouseover($event)' title="增加缩进">
-        <img :src='icons.indent'></img>
-      </button>
-      <button type="button" class='outdent' @click.stop='outdent' v-on:mouseover.stop='mouseover($event)' title="减少缩进">
-        <img :src='icons.outdent'></img>
-      </button>
-      <button type="button" class='insert-ol' @click='insertList("OrderedList")' v-on:mouseover.stop='mouseover($event)' title="有序列表">
-        <img :src='icons.listOrdered'></img>
-      </button>
       <button type="button" class='insert-ul' @click='insertList("UnorderedList")' v-on:mouseover.stop='mouseover($event)' title="无序列表">
         <img :src='icons.listUnordered'></img>
       </button>
-      <button type="button" class='align-left' @click='align("Left")' v-on:mouseover.stop='mouseover($event)' title="左对齐">
-        <img :src='icons.alignLeft'></img>
-      </button>
-      <button type="button" class='align-center' @click='align("Center")' v-on:mouseover.stop='mouseover($event)' title="居中对齐">
-        <img :src='icons.alignCenter'></img>
-      </button>
-      <button type="button" class='align-right' @click='align("Right")'  v-on:mouseover.stop='mouseover($event)' title='右对齐'>
-        <img :src='icons.alignRight'></img>
-      </button>
-      <button type="button" class="insert-quote" @click='insertQuote'>
-        <img :src="icons.insertQuote">
-      </button>
-      <button type="button" class='insert-link' @click='insertLinkClick'  v-on:mouseover.stop='mouseover($event)' title='插入链接'>
-        <img :src='icons.insertLink'></img>
-      </button>
+      
+      
       <button type="button" class='insert-options' @click="isInsertShow = !isInsertShow">
         <span class="insert-options-label"></span>
         <insert-options
          v-show="isInsertShow"
          :insertImage="insertImageClick"
          :insertLine="insertLine"
-         :insertVideo="insertVideoClick"
-         :insertBlock="insertBlock"
+         
+         
          :uploadImages='uploadImages'
          ></insert-options>
       </button>
-      <button type="button" class="backup" @click='backupClick' v-on:mouseover.stop='mouseover($event)' title="Ctrl + S"></button>
-      <button type="button" class="restore" @click='restoreClick'></button>
-      <button type="button" class="preview" @click='previewClick' v-on:mouseover.stop='mouseover($event)' title="Ctrl + P"></button>
     </div>
     <div
       contenteditable="true"
@@ -91,23 +39,13 @@
       >
     </div>
     <p class="select-words" v-show="selectWords">{{selectWords.length}}个字</p>
-    <insert-link
-      :insertLink='insertLink'
-      :propText='insertLinkSection.text'
-      :propLink='insertLinkSection.link'
-      v-show='isInsertLinkShow'
-      :cancel='insertLinkCancel'
-    ></insert-link>
-    <insert-video :insertVideo='insertVideo' v-show='isInsertVideoShow' :cancel='insertVideoCancel'></insert-video>
+    
   </div>
 </template>
 
 <script>
 import icons from './icons.js'
-import ColorPicker from './ColorPicker.vue'
 import TitlePicker from './TitlePicker.vue'
-import InsertLink from './InsertLink.vue'
-import InsertVideo from './InsertVideo.vue'
 import Insert from './Insert.vue'
 // import tippy from '../../node_modules/tippy.js/dist/tippy.min.js'
 const remove = function (arr, val) {
@@ -124,11 +62,8 @@ const editorElement = function () {
 export default {
   name: 'smeditor',
   components: {
-    'color-picker': ColorPicker,
     'title-picker': TitlePicker,
-    'insert-options': Insert,
-    'insert-link': InsertLink,
-    'insert-video': InsertVideo
+    'insert-options': Insert
   },
   props: ['config'],
   data () {
@@ -205,21 +140,7 @@ export default {
       //   arrow: true
       // })
     },
-    // 重做
-    redo () {
-      document.execCommand('redo')
-    },
-    // 撤销
-    undo () {
-      document.execCommand('undo')
-    },
-    // 移除格式
-    removeFormat () {
-      document.execCommand('removeFormat', false, '')
-      document.execCommand('insertHTML', false, `<p></p>`)
-      this.styles = []
-      this.FontSize = 16
-    },
+    
     // 字号选项点击
     fontSizePickerClick (size, index) {
       document.execCommand('FontSize', false, index + 1)
@@ -273,25 +194,7 @@ export default {
       // selection.removeAllRanges()
       // selection.addRange(range)
     },
-    // 基本样式点击
-    basicStyleClick (name) {
-      execCmd(this, () => {
-        document.execCommand(name, false, '')
-        if (this.styles.indexOf(name) === -1) {
-          this.styles.push(name)
-        } else {
-          remove(this.styles, name)
-        }
-      })
-    },
-    // 调色盘点击
-    colorPickerClick (color) {
-      // document.querySelector('.ql-color-label').style.fill = color
-      execCmd(this, () => {
-        document.execCommand('forecolor', false, color)
-        this.closeAlert()
-      })
-    },
+    
     // 点击插入图片
     insertImageClick (size, index) {
       this.closeAlert()
@@ -339,136 +242,22 @@ export default {
                 <div class="image-caption" style="min-width: 20%; max-width: 80%; height: 35px; display: inline-block; padding: 10px 10px 0px 10px; margin: 0 auto; border-bottom: 1px solid #d9d9d9; font-size: 16px; color: #999; content: "";"></div>
               </div>`)
     },
-    // 点击插入链接
-    insertLinkClick () {
-      this.closeAlert()
-      this.insertLinkSection.text = window.getSelection().toString()
-      getCursor(this)
-      this.isInsertLinkShow = true
-    },
-    // 插入链接
-    insertLink (url, title) {
-      restoreCursor(this)
-      const node = getSelectedNode()
-      if (node.localName === 'a') {
-        node.outerHTML = `<a href=${url} target="_blank">${title}</>`
-        return false
-      }
-      document.execCommand('insertHTML', false, `<a href=${url} target="_blank">${title}</>`)
-    },
-    // 取消插入链接
-    insertLinkCancel () {
-      this.closeAlert()
-      this.isInsertLinkShow = false
-    },
-    // 点击插入链接
-    insertVideoClick () {
-      this.closeAlert()
-      setTimeout(() => {
-        this.isInsertVideoShow = true
-      }, 200)
-      getCursor(this)
-    },
-    // 插入链接
-    insertVideo (text) {
-      restoreCursor(this)
-      document.execCommand('insertHTML', false, text)
-      this.closeAlert()
-    },
-    // 取消插入链接
-    insertVideoCancel () {
-      this.closeAlert()
-    },
+    
     // 插入一条线
     insertLine () {
       this.closeAlert()
       document.execCommand('insertHTML', false, `<p><hr></p>`)
     },
-    // 插入代码块
-    insertBlock () {
-      this.closeAlert()
-      document.execCommand('insertHTML', false, `<pre><code><span><br><span></code></pre>`)
-    },
-    // 插入引用
-    insertQuote () {
-      let node = getSelectedNode()
-      // console.log(node)
-      if (node.className === 'input-area') {
-        return false
-      }
-      if (node.localName === 'blockquote' && node.parentNode.className !== 'input-area') {
-        let str = node.innerHTML
-        console.log(node.parentNode)
-        node.parentNode.outerHTML = ''
-        document.execCommand('insertHTML', false, `<br><p>${str}</p>`)
-        this.insertEmptyP()
-      } else if (node.className === 'blockquote') {
-        let str = node.innerHTML
-        console.log(str)
-        document.execCommand('insertHTML', false, `<p>${str}</p>`)
-        this.insertEmptyP()
-        node.outerHTML = ''
-      } else if (node.innerHTML.length > 0 &&
-        node.className !== 'smeditor' &&
-        node.className !== editorElement().className &&
-        node.className !== 'blockquote') {
-        document.execCommand('insertHTML', false, `<div class="blockquote"><blockquote style="color: #B2B2B2; padding-left: 15px; border-left: 5px solid #B2B2B2; margin-top: 0px; margin-bottom: 0px;">${node.innerHTML}</blockquote></div>`)
-        node.outerHTML = ''
-      } else {
-        document.execCommand('insertHTML', false, `<div class="blockquote"><blockquote style="color: #B2B2B2; padding-left: 15px; border-left: 5px solid #B2B2B2; margin-top: 0px; margin-bottom: 0px;"><span><br></span></blockquote></div>`)
-      }
-    },
+    
+    
     // 插入 有序/无序 列表
     insertList (name) {
       this.closeAlert()
       document.execCommand(`insert${name}`, false, '')
     },
-    // 插入 todo , 暂时不做
-    insertCheck () {
-      this.closeAlert()
-      document.execCommand('insertHTML', false, `
-        <ul class="unchecked-list"><li class="unchecked">&nbsp</li></ul>
-      `)
-      document.querySelectorAll('.unchecked-list').forEach(ul => {
-        ul.childNodes.forEach(li => {
-          li.onclick = function (event) {
-            const name = event.target.className === 'unchecked' ? 'checked' : 'unchecked'
-            event.target.className = name
-            console.log(event.target.className)
-          }
-        })
-      })
-    },
-    // 缩进+
-    indent () {
-      document.execCommand('indent', false, null)
-    },
-    // 缩进-
-    outdent () {
-      document.execCommand('outdent', false, null)
-    },
-    // 对齐
-    align (name) {
-      execCmd(this, () => {
-        document.execCommand(`Justify${name}`)
-      })
-    },
-    // 备份
-    backupClick () {
-      window.localStorage.setItem('smeditor', editorElement().innerHTML)
-    },
-    // 恢复
-    restoreClick () {
-      editorElement().innerHTML = window.localStorage.getItem('smeditor') || ''
-    },
-    // 预览
-    previewClick () {
-      window.localStorage.setItem('smeditorPreview', editorElement().innerHTML)
-      const {href} = this.$router.resolve({
-        name: 'Preview'
-      })
-      window.open(href, '_blank')
-    },
+    
+    
+    
     // 关闭弹窗
     closeAlert () {
       setTimeout(() => {
@@ -484,6 +273,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.config.uploadUrl)
     setTimeout(() => {
       editorElement().focus()
       this.insertEmptyP()

@@ -1,20 +1,20 @@
 <template>
   <div class="home">
-    <div class="header">SMEditor
+    <!-- <div class="header">SMEditor
       <span>(石墨文档编辑器)</span>
     </div>
-    <div class="bg"></div>
+    <div class="bg"></div> -->
     <div class="smeditor-wrapper">
       <smeditor :config='config'></smeditor>
     </div>
-    <vfooter></vfooter>
+    <!-- <vfooter></vfooter> -->
   </div>
 </template>
 
 <script>
 import SMEditor from '@/components/SMEditor.vue'
 // import SMEditor from '../../release/smeditor.js'
-import VFooter from '@/views/VFooter.vue'
+//import VFooter from '@/views/VFooter.vue'
 // import c from './config.json'
 const config = {
   // 接口地址
@@ -26,7 +26,7 @@ const config = {
   sticky: true,
   // 上传成功回调
   uploadCallback: (data) => {
-    // console.log(data)
+    console.log(data)
     return data.image.url || 'https://ws1.sinaimg.cn/large/006tNc79gy1fp1rdw7e90j30rs0rsacb.jpg'
   },
   // 上传失败回调, 可选
@@ -40,7 +40,7 @@ export default {
   name: 'app',
   components: {
     'smeditor': SMEditor,
-    'vfooter': VFooter
+    //'vfooter': VFooter
   },
   data () {
     return {

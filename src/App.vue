@@ -8,11 +8,11 @@
 export default {
   name: 'app',
   mounted () {
-    let link = document.createElement('link')
-    link.href = 'https://ws3.sinaimg.cn/large/006tNc79ly1fnyr74sc8ej305m05mmx9.jpg'
-    link.rel = 'shortcut icon'
-    document.head.appendChild(link)
-    document.title = 'SMEditor (石墨文档编辑器)'
+    // let link = document.createElement('link')
+    // link.href = 'https://ws3.sinaimg.cn/large/006tNc79ly1fnyr74sc8ej305m05mmx9.jpg'
+    // link.rel = 'shortcut icon'
+    // document.head.appendChild(link)
+    // document.title = 'SMEditor (石墨文档编辑器)'
   }
 }
 </script>
